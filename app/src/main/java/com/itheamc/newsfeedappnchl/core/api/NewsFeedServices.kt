@@ -1,15 +1,14 @@
 package com.itheamc.newsfeedappnchl.core.api
 
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.itheamc.newsfeedappnchl.data.models.SectionResponseEntity
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-object NewsFeedServices {
-    private const val BASE_URL = "https://content.guardianapis.com"
-
-    fun instance(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+interface NewsFeedServices {
+    @GET("/sections")
+    suspend fun fetchSections(
+        @Query("q") query: String,
+        @Query("format") format: String = "json"
+    ): Response<SectionResponseEntity>
 }

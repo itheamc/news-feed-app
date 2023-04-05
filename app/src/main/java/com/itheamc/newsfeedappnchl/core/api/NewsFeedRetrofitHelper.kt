@@ -1,9 +1,31 @@
 package com.itheamc.newsfeedappnchl.core.api
 
-import retrofit2.Response
-import retrofit2.http.GET
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-interface NewsFeedRetrofitHelper {
-    @GET("/sections")
-    suspend fun getEntries(): Response<List<String>>
+object NewsFeedRetrofitHelper {
+
+    private const val BASE_URL = "https://content.guardianapis.com"
+
+    fun instance(): Retrofit {
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            val req = chain.request().newBuilder()
+                .url(
+                    chain.request().url.newBuilder()
+                        .addQueryParameter("api-key", "d60dc606-7769-4bbd-a88a-e711bdb9e9ee")
+                        .build()
+                )
+//                .addHeader("Authorization", "Token d60dc606-7769-4bbd-a88a-e711bdb9e9ee")
+                .build()
+
+            chain.proceed(req)
+        }.build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 }
