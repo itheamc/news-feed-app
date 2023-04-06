@@ -56,6 +56,7 @@ class LocalDataSource(
 
             // Creating user object
             val user = User(
+                id = 0,
                 name = name,
                 username = username,
                 email = email,
@@ -192,7 +193,7 @@ class LocalDataSource(
             )
         } catch (e: Throwable) {
             // Emit error state
-            emit(ApiResult.Error(Exception(cause = e)))
+            emit(ApiResult.Error(Exception(e)))
         }
     }
 
@@ -208,7 +209,7 @@ class LocalDataSource(
             sectionDao.insertAll(list)
 
             // Return list of inserted section IDs
-            list.map { it.id }
+            list.map { it.sectionId }
         } catch (e: Throwable) {
             // Handle error
             emptyList()
@@ -222,6 +223,7 @@ class LocalDataSource(
         return try {
             // Insert section into database
             sectionDao.insertSection(section)
+            section.sectionId
         } catch (e: Throwable) {
             // Handle error
             null
@@ -295,7 +297,7 @@ class LocalDataSource(
             )
         } catch (e: Throwable) {
             // Emit error state
-            emit(ApiResult.Error(Exception(cause = e)))
+            emit(ApiResult.Error(Exception(e)))
         }
     }
 
@@ -311,7 +313,7 @@ class LocalDataSource(
             newsDao.insertAll(list)
 
             // Return list of inserted news IDs
-            list.map { it.id }
+            list.map { it.newsId }
         } catch (e: Throwable) {
             // Handle error
             emptyList()
@@ -325,6 +327,8 @@ class LocalDataSource(
         return try {
             // Insert news into database
             newsDao.insertNews(news)
+
+            news.newsId
         } catch (e: Throwable) {
             // Handle error
             null

@@ -17,7 +17,7 @@ interface NewsDao {
      * Function to insert [news] to our database
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNews(news: News): String
+    suspend fun insertNews(news: News): Long
 
     /**
      * Function to insert [list] to our database
@@ -47,5 +47,11 @@ interface NewsDao {
      * Function to get news by id
      */
     @Query("SELECT * FROM newses WHERE id =:id")
+    suspend fun getNews(id: Long): News?
+
+    /**
+     * Function to get news by news id
+     */
+    @Query("SELECT * FROM newses WHERE newsId =:id")
     suspend fun getNews(id: String): News?
 }
