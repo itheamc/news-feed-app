@@ -8,13 +8,13 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "sections")
 data class Section(
-    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    @SerializedName("_id") @PrimaryKey(autoGenerate = true) var id: Long = 0,
     @SerializedName("id") @ColumnInfo(defaultValue = "") var sectionId: String,
     @ColumnInfo(defaultValue = "") var webTitle: String,
     @ColumnInfo(defaultValue = "") var webUrl: String,
     @ColumnInfo(defaultValue = "") var apiUrl: String,
     @ColumnInfo(defaultValue = "") var code: String = "",
-    @Ignore var editions: List<Section>? = null
+    @Ignore var editions: List<Section>
 ) {
-    constructor() : this(0, "", "", "", "", "", null)
+    constructor() : this(0, "", "", "", "", "", emptyList())
 }

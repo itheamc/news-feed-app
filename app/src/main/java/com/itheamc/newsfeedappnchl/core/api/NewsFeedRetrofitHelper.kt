@@ -16,9 +16,7 @@ object NewsFeedRetrofitHelper {
                         .addQueryParameter("api-key", "d60dc606-7769-4bbd-a88a-e711bdb9e9ee")
                         .build()
                 )
-//                .addHeader("Authorization", "Token d60dc606-7769-4bbd-a88a-e711bdb9e9ee")
                 .build()
-
             chain.proceed(req)
         }.build()
 

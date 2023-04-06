@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_news_section"
-        android:name="com.itheamc.newsfeedappnchl.ui.fragments.favorite_news.FavoriteNewsFragment"
+        android:name="com.itheamc.newsfeedappnchl.ui.fragments.news_section.NewsSectionFragment"
         android:label="@string/title_news_section"
         tools:layout="@layout/fragment_news_section" />
 

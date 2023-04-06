@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "newses")
 data class News(
-    @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    @SerializedName("_id") @PrimaryKey(autoGenerate = true) var id: Long = 0,
     @SerializedName("id") @ColumnInfo(defaultValue = "") var newsId: String,
     @ColumnInfo(defaultValue = "") var type: String,
     @ColumnInfo(defaultValue = "") var sectionId: String,

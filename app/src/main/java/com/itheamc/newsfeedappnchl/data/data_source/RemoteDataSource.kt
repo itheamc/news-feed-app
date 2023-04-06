@@ -2,6 +2,7 @@ package com.itheamc.newsfeedappnchl.data.data_source
 
 import com.itheamc.newsfeedappnchl.core.api.NewsFeedServices
 import com.itheamc.newsfeedappnchl.data.models.ApiResult
+import com.itheamc.newsfeedappnchl.data.models.NewsResponseEntity
 import com.itheamc.newsfeedappnchl.data.models.SectionResponseEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -28,7 +29,7 @@ class RemoteDataSource(
                 val response = newsFeedServices.fetchSections(query = query)
 
                 if (response.isSuccessful) {
-                    val sectionsResponseEntity = response.body();
+                    val sectionsResponseEntity = response.body()
 
                     if (sectionsResponseEntity != null) {
                         // Emit success state with data
@@ -37,12 +38,13 @@ class RemoteDataSource(
                                 sectionsResponseEntity
                             )
                         )
+                        return@flow
                     }
                 }
 
                 // Emit success state with data
                 emit(
-                    ApiResult.Error(Exception(message = response.message()))
+                    ApiResult.Error(Exception(response.message()))
                 )
 
 
@@ -55,31 +57,43 @@ class RemoteDataSource(
 
     /**
      * ---------------------------------------------------------
-     * Methods for Sections related data handling
+     * Methods for News related data handling
      */
 
     /*
-      Method to fetch the sections data from the local database
+      Method to fetch the news data from the local database
      */
     suspend fun fetchNews(
-
-    ): Flow<ApiResult<SectionResponseEntity>> =
+        section: String,
+        query: String = "",
+        reference: String = "",
+        tag: String = "",
+        limit: Int = 10,
+        page: Int = 1,
+    ): Flow<ApiResult<NewsResponseEntity>> =
         flow {
             try {
                 // Emit loading state
                 emit(ApiResult.Loading)
 
-                // Fetch sections and count from database
-                val response = newsFeedServices.fetchSections(query = "query")
+                // Fetch news and count from database
+                val response = newsFeedServices.fetchNews(
+                    query = query,
+                    section = section,
+                    reference = reference,
+                    tag = tag,
+                    page = page,
+                    pageSize = limit
+                )
 
                 if (response.isSuccessful) {
-                    val sectionsResponseEntity = response.body();
+                    val newsResponseEntity = response.body()
 
-                    if (sectionsResponseEntity != null) {
+                    if (newsResponseEntity != null) {
                         // Emit success state with data
                         emit(
                             ApiResult.Success(
-                                sectionsResponseEntity
+                                newsResponseEntity
                             )
                         )
                     }
@@ -87,7 +101,7 @@ class RemoteDataSource(
 
                 // Emit success state with data
                 emit(
-                    ApiResult.Error(Exception(message = response.message()))
+                    ApiResult.Error(Exception(response.message()))
                 )
 
 
