@@ -24,4 +24,16 @@ interface UserDao {
     @Update
     suspend fun updateUser(user: User)
 
+    /**
+     * Function to get user by id
+     */
+    @Query("SELECT * FROM users WHERE id =:id")
+    suspend fun getUser(id: Long): User?
+
+    /**
+     * Function to get user by username or email
+     */
+    @Query("SELECT * FROM users WHERE username =:usernameOrEmail OR email =:usernameOrEmail")
+    suspend fun getUser(usernameOrEmail: String): User?
+
 }

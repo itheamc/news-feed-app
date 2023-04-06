@@ -11,13 +11,13 @@ interface NewsDao {
      * [offset] -> offset is the point after which rows not more than limit is fetched
      */
     @Query("SELECT * FROM news ORDER BY id ASC LIMIT :limit OFFSET :offset")
-    suspend fun news(limit: Int, offset: Int): List<News>
+    suspend fun newses(limit: Int, offset: Int): List<News>
 
     /**
      * Function to insert [news] to our database
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNews(news: News): Long
+    suspend fun insertNews(news: News): String
 
     /**
      * Function to delete [news] from our database
@@ -36,4 +36,10 @@ interface NewsDao {
      */
     @Query("SELECT COUNT(*) FROM news")
     suspend fun count(): Long
+
+    /**
+     * Function to get news by id
+     */
+    @Query("SELECT * FROM news WHERE id =:id")
+    suspend fun getNews(id: String): News?
 }

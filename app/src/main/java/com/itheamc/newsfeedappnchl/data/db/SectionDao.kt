@@ -17,7 +17,7 @@ interface SectionDao {
      * Function to insert [section] to our database
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSection(section: Section): Long
+    suspend fun insertSection(section: Section): String
 
     /**
      * Function to delete [section] from our database
@@ -36,4 +36,10 @@ interface SectionDao {
      */
     @Query("SELECT COUNT(*) FROM sections")
     suspend fun count(): Long
+
+    /**
+     * Function to get section by id
+     */
+    @Query("SELECT * FROM sections WHERE id =:id")
+    suspend fun getSection(id: String): Section?
 }
