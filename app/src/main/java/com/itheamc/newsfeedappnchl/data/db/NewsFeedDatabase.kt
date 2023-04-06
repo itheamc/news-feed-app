@@ -4,11 +4,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.itheamc.newsfeedappnchl.NCHLApplication
+import com.itheamc.newsfeedappnchl.data.models.News
 import com.itheamc.newsfeedappnchl.data.models.Section
+import com.itheamc.newsfeedappnchl.data.models.User
 
 
-@Database(entities = [Section::class], version = 1, exportSchema = false)
-abstract class NewsFeedDatabase: RoomDatabase() {
+@Database(entities = [Section::class, News::class, User::class], version = 1, exportSchema = false)
+abstract class NewsFeedDatabase : RoomDatabase() {
 
     /**
      * Abstract function to return the instance of the UserDao
