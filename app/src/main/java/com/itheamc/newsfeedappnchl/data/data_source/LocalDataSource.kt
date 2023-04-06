@@ -7,6 +7,8 @@ import com.itheamc.newsfeedappnchl.data.models.*
 import com.itheamc.newsfeedappnchl.utils.Amcryption
 import com.itheamc.newsfeedappnchl.utils.isValidEmail
 import com.itheamc.newsfeedappnchl.utils.isValidUsername
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.UUID
 
 class LocalDataSource(
@@ -139,23 +141,222 @@ class LocalDataSource(
         }
     }
 
-    /**
-     * Method to fetch the sections data from the local database
+    /*
+    Method to get user by id
      */
-    suspend fun fetchSections(): ApiResult<SectionResponseEntity> {
+    suspend fun getUser(
+        id: Long,
+        token: String,
+    ): User? {
         return try {
-            ApiResult.Success(
-                SectionResponseEntity(
-                    response = GuardianResponse(
-                        status = "success",
-                        userTier = "developer",
-                        total = 10,
-                        results = emptyList()
+            val user = userDao.getUser(id = id)
+
+            return if (user != null && user.token == token) user else null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
+     * ---------------------------------------------------------
+     * Methods for Sections related data handling
+     */
+
+    /*
+      Method to fetch the sections data from the local database
+     */
+    suspend fun fetchSections(
+        limit: Int = 10,
+        offset: Int = 0
+    ): Flow<ApiResult<SectionResponseEntity>> = flow {
+        try {
+            // Emit loading state
+            emit(ApiResult.Loading)
+
+            // Fetch sections and count from database
+            val sections = sectionDao.sections(limit, offset)
+            val count = sectionDao.count()
+
+            // Emit success state with data
+            emit(
+                ApiResult.Success(
+                    SectionResponseEntity(
+                        response = GuardianResponse(
+                            status = "success",
+                            userTier = "developer",
+                            total = count.toInt(),
+                            results = sections
+                        )
                     )
                 )
             )
         } catch (e: Throwable) {
-            ApiResult.Error(Exception(cause = e))
+            // Emit error state
+            emit(ApiResult.Error(Exception(cause = e)))
+        }
+    }
+
+
+    /*
+      Method to add the section list data to the local database with sectionDao
+     */
+    suspend fun insertSections(
+        list: List<Section>
+    ): List<String> {
+        return try {
+            // Insert sections into database
+            sectionDao.insertAll(list)
+
+            // Return list of inserted section IDs
+            list.map { it.id }
+        } catch (e: Throwable) {
+            // Handle error
+            emptyList()
+        }
+    }
+
+    /*
+      Method to add the section data to the local database with sectionDao
+     */
+    suspend fun insertSection(section: Section): String? {
+        return try {
+            // Insert section into database
+            sectionDao.insertSection(section)
+        } catch (e: Throwable) {
+            // Handle error
+            null
+        }
+    }
+
+    /*
+      Method to update the section data to the local database with sectionDao
+     */
+    suspend fun updateSection(section: Section): Boolean {
+        return try {
+            // Update section in database
+            sectionDao.updateSection(section)
+            true
+        } catch (e: Throwable) {
+            // Handle error
+            false
+        }
+    }
+
+
+    /*
+      Method to delete the section data to the local database with sectionDao
+     */
+    suspend fun deleteSection(section: Section): Boolean {
+        return try {
+            // Delete section in database
+            sectionDao.deleteSection(section)
+            true
+        } catch (e: Throwable) {
+            // Handle error
+            false
+        }
+    }
+
+    /**
+     * ---------------------------------------------------------
+     * Methods for News related data handling
+     */
+
+    /*
+      Method to fetch the news data from the local database
+     */
+    suspend fun fetchNews(
+        limit: Int = 10,
+        offset: Int = 0
+    ): Flow<ApiResult<NewsResponseEntity>> = flow {
+        try {
+            // Emit loading state
+            emit(ApiResult.Loading)
+
+            // Fetch news and count from database
+            val news = newsDao.newses(limit, offset)
+            val count = newsDao.count()
+
+            // Emit success state with data
+            emit(
+                ApiResult.Success(
+                    NewsResponseEntity(
+                        response = GuardianResponse(
+                            status = "success",
+                            userTier = "developer",
+                            total = count.toInt(),
+                            startIndex = offset,
+                            pageSize = limit,
+                            currentPage = (offset / limit) + 1,
+                            results = news
+                        )
+                    )
+                )
+            )
+        } catch (e: Throwable) {
+            // Emit error state
+            emit(ApiResult.Error(Exception(cause = e)))
+        }
+    }
+
+
+    /*
+      Method to add the news list data to the local database with newsDao
+     */
+    suspend fun insertNews(
+        list: List<News>
+    ): List<String> {
+        return try {
+            // Insert news into database
+            newsDao.insertAll(list)
+
+            // Return list of inserted news IDs
+            list.map { it.id }
+        } catch (e: Throwable) {
+            // Handle error
+            emptyList()
+        }
+    }
+
+    /*
+      Method to add the news data to the local database with newsDao
+     */
+    suspend fun insertNews(news: News): String? {
+        return try {
+            // Insert news into database
+            newsDao.insertNews(news)
+        } catch (e: Throwable) {
+            // Handle error
+            null
+        }
+    }
+
+    /*
+      Method to update the news data in the local database with newsDao
+     */
+    suspend fun updateNews(news: News): Boolean {
+        return try {
+            // Update news in database
+            newsDao.updateNews(news)
+            true
+        } catch (e: Throwable) {
+            // Handle error
+            false
+        }
+    }
+
+
+    /*
+      Method to delete the news data from the local database with newsDao
+     */
+    suspend fun deleteNews(news: News): Boolean {
+        return try {
+            // Delete news from database
+            newsDao.deleteNews(news)
+            true
+        } catch (e: Throwable) {
+            // Handle error
+            false
         }
     }
 }

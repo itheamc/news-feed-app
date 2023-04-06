@@ -20,6 +20,12 @@ interface SectionDao {
     suspend fun insertSection(section: Section): String
 
     /**
+     * Function to insert [list] to our database
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(list: List<Section>)
+
+    /**
      * Function to delete [section] from our database
      */
     @Delete
