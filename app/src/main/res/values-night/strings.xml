@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_of_news_fragment">News</string>
+    <string name="title_of_fragment_news_details">News Details</string>
+</resources>

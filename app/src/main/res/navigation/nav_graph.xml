@@ -9,12 +9,38 @@
         android:id="@+id/navigation_news_section"
         android:name="com.itheamc.newsfeedappnchl.ui.fragments.news_section.NewsSectionFragment"
         android:label="@string/title_news_section"
-        tools:layout="@layout/fragment_news_section" />
+        tools:layout="@layout/fragment_news_section">
+        <action
+            android:id="@+id/action_navigation_news_section_to_newsFragment"
+            app:destination="@id/newsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_favorite_news"
         android:name="com.itheamc.newsfeedappnchl.ui.fragments.favorite_news.FavoriteNewsFragment"
         android:label="@string/title_favorite_news"
-        tools:layout="@layout/fragment_favorite_news" />
+        tools:layout="@layout/fragment_favorite_news" >
+        <action
+            android:id="@+id/action_navigation_favorite_news_to_newsDetailsFragment"
+            app:destination="@id/newsDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsFragment"
+        android:name="com.itheamc.newsfeedappnchl.ui.fragments.news.NewsFragment"
+        android:label="@string/title_of_news_fragment"
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_newsFragment_to_newsDetailsFragment"
+            app:destination="@id/newsDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailsFragment"
+        android:name="com.itheamc.newsfeedappnchl.ui.fragments.news_details.NewsDetailsFragment"
+        android:label="@string/title_of_fragment_news_details"
+        tools:layout="@layout/fragment_news_details" />
 
 </navigation>

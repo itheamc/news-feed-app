@@ -1,10 +1,12 @@
 package com.itheamc.newsfeedappnchl.data.data_source
 
+import android.util.Log
 import com.itheamc.newsfeedappnchl.core.api.NewsFeedServices
 import com.itheamc.newsfeedappnchl.data.models.ApiResult
 import com.itheamc.newsfeedappnchl.data.models.NewsResponseEntity
 import com.itheamc.newsfeedappnchl.data.models.SectionResponseEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flow
 
 class RemoteDataSource(
@@ -38,15 +40,18 @@ class RemoteDataSource(
                                 sectionsResponseEntity
                             )
                         )
-                        return@flow
+                    } else {
+                        // Emit Error
+                        emit(
+                            ApiResult.Error(Exception(response.message()))
+                        )
                     }
+                } else {
+                    // Emit Error
+                    emit(
+                        ApiResult.Error(Exception(response.message()))
+                    )
                 }
-
-                // Emit success state with data
-                emit(
-                    ApiResult.Error(Exception(response.message()))
-                )
-
 
             } catch (e: Throwable) {
                 // Emit error state
@@ -86,6 +91,8 @@ class RemoteDataSource(
                     pageSize = limit
                 )
 
+                Log.d("AMIT", "fetchNews: ${response.body()}")
+
                 if (response.isSuccessful) {
                     val newsResponseEntity = response.body()
 
@@ -96,13 +103,18 @@ class RemoteDataSource(
                                 newsResponseEntity
                             )
                         )
+                    } else {
+                        // Emit Error
+                        emit(
+                            ApiResult.Error(Exception(response.message()))
+                        )
                     }
+                } else {
+                    // Emit Error
+                    emit(
+                        ApiResult.Error(Exception(response.message()))
+                    )
                 }
-
-                // Emit success state with data
-                emit(
-                    ApiResult.Error(Exception(response.message()))
-                )
 
 
             } catch (e: Throwable) {

@@ -1,6 +1,5 @@
 package com.itheamc.newsfeedappnchl.ui.fragments.favorite_news
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,9 +14,6 @@ class FavoriteNewsFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    // FavoriteNewsViewModel
-    private lateinit var viewModel: FavoriteNewsViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,10 +22,6 @@ class FavoriteNewsFragment : Fragment() {
     ): View {
         // Initializing FragmentFavoriteNewsBinding
         _binding = FragmentFavoriteNewsBinding.inflate(inflater, container, false)
-
-        // Initializing Favorite News View Model
-        viewModel =
-            ViewModelProvider(this)[FavoriteNewsViewModel::class.java]
 
         return binding.root
     }
